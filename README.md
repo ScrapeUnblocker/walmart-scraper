@@ -147,7 +147,7 @@ spends no API credit. CI runs lint + tests on Python 3.9 and 3.12.
 ## How it works
 
 Each call goes to the ScrapeUnblocker
-[`get_parsed`](https://developers.scrapeunblocker.com/?utm_source=github&utm_medium=integration&utm_campaign=example-repos)
+[`get_parsed`](https://docs.scrapeunblocker.com/?utm_source=github&utm_medium=integration&utm_campaign=example-repos)
 endpoint with a Walmart URL. The service renders the page and returns parsed
 JSON; this library normalises those fields into typed `SearchItem` / `Product`
 objects, handles multi-page collection, and retries transient failures. Because
@@ -157,8 +157,8 @@ markup.
 ## Links
 
 - 🌐 [ScrapeUnblocker](https://scrapeunblocker.com/?utm_source=github&utm_medium=integration&utm_campaign=example-repos)
-- 📚 [API documentation](https://developers.scrapeunblocker.com/?utm_source=github&utm_medium=integration&utm_campaign=example-repos)
-- 🐍 [Python SDK](https://developers.scrapeunblocker.com/sdks/python?utm_source=github&utm_medium=integration&utm_campaign=example-repos)
+- 📚 [API documentation](https://docs.scrapeunblocker.com/?utm_source=github&utm_medium=integration&utm_campaign=example-repos)
+- 🐍 [Python SDK](https://docs.scrapeunblocker.com/sdks/python?utm_source=github&utm_medium=integration&utm_campaign=example-repos)
 
 ## License
 
