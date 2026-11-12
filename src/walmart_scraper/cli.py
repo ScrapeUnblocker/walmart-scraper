@@ -39,14 +39,14 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     search = sub.add_parser("search", help="Search Walmart and list matching products.")
-    search.add_argument("query", help="Search terms, e.g. \"coffee maker\".")
+    search.add_argument("query", help='Search terms, e.g. "coffee maker".')
     search.add_argument(
         "--pages", type=int, default=1, help="Number of result pages to collect (default: 1)."
     )
     search.add_argument(
         "--enrich",
         action="store_true",
-        help="Fetch each product page to add price/brand/images (extra API calls).",
+        help="Fetch each product page to add currency/brand/images (extra API calls).",
     )
     search.add_argument(
         "--limit",
@@ -66,9 +66,7 @@ def build_parser() -> argparse.ArgumentParser:
 def _add_output_args(sub: argparse.ArgumentParser) -> None:
     sub.add_argument("--json", action="store_true", help="Print JSON (default).")
     sub.add_argument("--csv", metavar="PATH", help="Write results to a CSV file at PATH.")
-    sub.add_argument(
-        "--pretty", action="store_true", help="Pretty-print JSON with indentation."
-    )
+    sub.add_argument("--pretty", action="store_true", help="Pretty-print JSON with indentation.")
 
 
 def main(argv: Sequence[str] | None = None) -> int:

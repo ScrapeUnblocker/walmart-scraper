@@ -25,13 +25,14 @@ def _pick(data: dict[str, Any], *keys: str) -> Any:
 class SearchItem:
     """One product tile from a Walmart search results page.
 
-    Note: Walmart's search listing does not expose a price - fetch the product
-    page (:meth:`WalmartScraper.product`) to get price and currency.
+    Note: the listing carries the price but not its currency - fetch the
+    product page (:meth:`WalmartScraper.product`) for currency, brand and images.
     """
 
     item_id: str | None = None
     product_id: str | None = None
     name: str | None = None
+    price: float | None = None
     url: str | None = None
     image_url: str | None = None
     average_rating: float | None = None
@@ -51,6 +52,7 @@ class SearchItem:
             item_id=_stringify(_pick(data, "item_id", "id")),
             product_id=_pick(data, "product_id", "us_item_id"),
             name=_pick(data, "name", "title"),
+            price=_split_price(data.get("price"))[0],
             url=_pick(data, "canonical_url", "url", "product_url"),
             image_url=_pick(data, "image_url", "image", "thumbnail"),
             average_rating=_to_float(_pick(data, "average_rating", "rating")),
@@ -58,7 +60,7 @@ class SearchItem:
             availability_status=_pick(data, "availability_status", "availability"),
             seller_name=_pick(data, "seller_name", "seller"),
             is_sponsored=_to_bool(_pick(data, "is_sponsored", "sponsored")),
-            badge_text=_pick(data, "badge_text", "badge"),
+            badge_text=_pick(data, "badge_text", "badge", "promo_flag"),
             category_path=_pick(data, "category_path", "category"),
             product_type=_pick(data, "catalog_product_type", "product_type"),
             out_of_stock=_to_bool(_pick(data, "is_out_of_stock", "out_of_stock")),

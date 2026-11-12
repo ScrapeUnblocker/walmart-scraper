@@ -1,7 +1,8 @@
 """Search Walmart, enrich the top results with product-page prices, save a CSV.
 
-The search listing does not include a price, so this fetches each product page
-to fill in price, currency, brand and images - then writes a spreadsheet.
+The search listing has the price but not its currency, so this fetches each
+product page to fill in price, currency, brand and images - then writes a
+spreadsheet.
 
 Run:
     export SCRAPEUNBLOCKER_KEY=your_key_here

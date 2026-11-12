@@ -17,6 +17,35 @@ def test_search_item_from_parsed(sample_listing):
     assert item.product_type == "Drip Coffee Makers"
 
 
+def test_search_item_from_short_key_listing():
+    # The parser now returns short keys, a price dict and a promo_flag badge.
+    item = SearchItem.from_parsed(
+        {
+            "title": "Mr. Coffee Programmable Coffee Maker, 12-Cup Coffee Maker, Black",
+            "item_id": "14013072090",
+            "url": "https://www.walmart.com/ip/Mr-Coffee/14013072090?classType=REGULAR",
+            "price": {"value": 32.97, "currency": None},
+            "rating": 4.3,
+            "review_count": 3411,
+            "image": "https://i5.walmartimages.com/seo/x.jpeg",
+            "category": "Home Page/Home/Appliances/Coffee Makers",
+            "availability": "IN_STOCK",
+            "seller": "Walmart.com",
+            "promo_flag": "Rollback",
+            "is_sponsored": True,
+            "product_type": "Drip Coffee Makers",
+        }
+    )
+    assert item.name.startswith("Mr. Coffee")
+    assert item.price == 32.97
+    assert item.average_rating == 4.3
+    assert item.number_of_reviews == 3411
+    assert item.image_url.endswith("x.jpeg")
+    assert item.availability_status == "IN_STOCK"
+    assert item.seller_name == "Walmart.com"
+    assert item.badge_text == "Rollback"
+
+
 def test_search_item_handles_missing_fields():
     item = SearchItem.from_parsed({"name": "Thing"})
     assert item.name == "Thing"

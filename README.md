@@ -1,7 +1,7 @@
 # walmart-scraper
 
 [![CI](https://github.com/ScrapeUnblocker/walmart-scraper/actions/workflows/ci.yml/badge.svg)](https://github.com/ScrapeUnblocker/walmart-scraper/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 Scrape **Walmart** search results and product details as clean, structured JSON —
@@ -20,8 +20,8 @@ Ships both a command-line tool and a small Python library.
 
 - 🔎 **Search** — collect product tiles for any query, across multiple pages.
 - 🏷️ **Product details** — price, currency, brand, rating count, dimensions, images.
-- ➕ **Enrichment** — the search listing has no price; `--enrich` fetches each
-  product page to fill it in.
+- ➕ **Enrichment** — the search listing has the price but not its currency;
+  `--enrich` fetches each product page to add currency, brand and images.
 - 🧾 **Export** — print JSON or write a CSV, from the CLI or the library.
 - 🌍 **Country targeting** — route through a chosen proxy country (default `us`).
 - 🔁 **Resilient** — automatic retry/backoff on transient bot walls and outages.
@@ -50,7 +50,7 @@ export SCRAPEUNBLOCKER_KEY=your_key_here
 # Search and print JSON
 walmart-scraper search "coffee maker" --pages 2 --pretty
 
-# Search, enrich the top 5 with prices, save a spreadsheet
+# Search, enrich the top 5 with product details, save a spreadsheet
 walmart-scraper search "coffee maker" --enrich --limit 5 --csv coffee.csv
 
 # One product, by URL or by numeric item id
@@ -66,14 +66,14 @@ walmart-scraper --country us search "air fryer"
 ```python
 from walmart_scraper import WalmartScraper
 
-scraper = WalmartScraper()                     # reads SCRAPEUNBLOCKER_KEY
+scraper = WalmartScraper()  # reads SCRAPEUNBLOCKER_KEY
 
-# Search result tiles (no price on the listing page)
+# Search result tiles (price, rating, seller)
 items = scraper.search("coffee maker", pages=1)
 for item in items[:5]:
-    print(item.name, "-", item.average_rating, "stars")
+    print(item.name, "-", item.price, "-", item.average_rating, "stars")
 
-# Full product detail (has price)
+# Full product detail (adds currency, brand, images)
 product = scraper.product(items[0].url)
 print(product.title, product.price, product.currency)
 
@@ -87,20 +87,21 @@ A search item (`walmart-scraper search "coffee maker"`):
 
 ```json
 {
-  "item_id": "985675140",
-  "product_id": "2PPLV83Y1QHE",
-  "name": "BLACK+DECKER Programmable 12-Cup Drip Coffee Maker",
-  "url": "https://www.walmart.com/ip/BLACK-DECKER-Coffeemaker/985675140",
+  "item_id": "14013072090",
+  "product_id": null,
+  "name": "Mr. Coffee Programmable Coffee Maker, 12-Cup Coffee Maker, Black",
+  "price": 32.97,
+  "url": "https://www.walmart.com/ip/Mr-Coffee-Programmable-Coffee-Maker-12-Cup-Coffee-Maker-Black/14013072090?classType=REGULAR&athbdg=L1300",
   "image_url": "https://i5.walmartimages.com/seo/...jpeg",
-  "average_rating": 4.5,
-  "number_of_reviews": 6253,
-  "availability_status": "In stock",
+  "average_rating": 4.3,
+  "number_of_reviews": 3411,
+  "availability_status": "IN_STOCK",
   "seller_name": "Walmart.com",
-  "is_sponsored": false,
-  "badge_text": "100+ bought since yesterday",
-  "category_path": "Home Page/Home/Appliances/Kitchen Appliances/Coffee Makers",
+  "is_sponsored": true,
+  "badge_text": "Rollback",
+  "category_path": "Home Page/Home/Appliances/Kitchen Appliances/Coffee Shop/Coffee Makers",
   "product_type": "Drip Coffee Makers",
-  "out_of_stock": false
+  "out_of_stock": null
 }
 ```
 
@@ -142,7 +143,7 @@ make test          # pytest -q
 ```
 
 The test suite mocks the ScrapeUnblocker client, so it runs fully offline and
-spends no API credit. CI runs lint + tests on Python 3.9 and 3.12.
+spends no API credit. CI runs lint + tests on Python 3.11 and 3.13.
 
 ## How it works
 

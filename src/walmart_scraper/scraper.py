@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import re
 import time
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 from urllib.parse import quote_plus, urlparse
 
 from scrapeunblocker import BlockedError, Client, ScrapeUnblockerError, UpstreamOutageError
@@ -105,10 +106,11 @@ class WalmartScraper:
     def search_and_enrich(
         self, query: str, *, pages: int = 1, limit: int | None = None
     ) -> list[Product]:
-        """Search, then fetch each product page to attach price and details.
+        """Search, then fetch each product page to attach currency and details.
 
-        Handy because the search listing omits price. ``limit`` caps how many
-        products are enriched (each product page is one extra API call).
+        The search listing has the price but not its currency, brand or images.
+        ``limit`` caps how many products are enriched (each product page is one
+        extra API call).
         """
         listings = self.search(query, pages=pages)
         if limit is not None:
